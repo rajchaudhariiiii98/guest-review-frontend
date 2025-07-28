@@ -8,15 +8,15 @@
 
 ### 1. Connect Your GitHub Repository
 1. Go to [Render Dashboard](https://dashboard.render.com)
-2. Click "New +" and select "Static Site"
+2. Click "New +" and select "Web Service"
 3. Connect your GitHub account if not already connected
 4. Select your repository: `rajchaudhariiiii98/guest-review-frontend`
 
-### 2. Configure the Static Site
+### 2. Configure the Web Service
 - **Name**: `guest-review-frontend` (or your preferred name)
 - **Build Command**: `npm install && npm run build`
-- **Publish Directory**: `dist`
-- **Environment**: Static Site
+- **Start Command**: `npm start`
+- **Environment**: Node
 
 ### 3. Environment Variables (if needed)
 Add any environment variables if your app requires them:
@@ -24,9 +24,9 @@ Add any environment variables if your app requires them:
 - Add environment variables under "Environment" tab
 
 ### 4. Deploy
-1. Click "Create Static Site"
-2. Render will automatically build and deploy your site
-3. Your site will be available at: `https://your-app-name.onrender.com`
+1. Click "Create Web Service"
+2. Render will automatically build and deploy your service
+3. Your service will be available at: `https://your-app-name.onrender.com`
 
 ### 5. Custom Domain (Optional)
 1. Go to your service settings
