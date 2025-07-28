@@ -15,6 +15,16 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Hardcoded master user credentials
+  const MASTER_EMAIL = 'master@review.com';
+  const MASTER_PASSWORD = 'admin123';
+  const MASTER_USER_OBJ = {
+    username: 'Master',
+    email: MASTER_EMAIL,
+    role: 'Master',
+    _id: 'master-user',
+  };
+
   const API_BASE_URL = 'https://guest-review-backend.onrender.com/api';
 
   useEffect(() => {
@@ -33,49 +43,29 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
+    // Check for master user first
+    if (email === MASTER_EMAIL && password === MASTER_PASSWORD) {
+      localStorage.setItem('token', 'master-token');
+      localStorage.setItem('user', JSON.stringify(MASTER_USER_OBJ));
+      setUser(MASTER_USER_OBJ);
+      return { success: true };
+    }
+    // Fallback to backend login for other users
     try {
       const response = await axios.post(`${API_BASE_URL}/users/login`, {
         email,
         password
       });
-
       const { token, user: userData } = response.data;
-      
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
       setUser(userData);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Login failed' 
-      };
-    }
-  };
-
-  const register = async (username, email, password, role = 'Sub-User') => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/users/register`, {
-        username,
-        email,
-        password,
-        role
-      });
-
-      const { token, user: userData } = response.data;
-      
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
-      setUser(userData);
-      return { success: true };
-    } catch (error) {
-      return { 
-        success: false, 
-        message: error.response?.data?.message || 'Registration failed' 
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Login failed'
       };
     }
   };
@@ -91,7 +81,6 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     login,
-    register,
     logout
   };
 
